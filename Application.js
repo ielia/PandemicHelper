@@ -1,4 +1,5 @@
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import ConfigScreen from './screens/ConfigScreen';
 import GameSetupScreen from './screens/GameSetupScreen';
 import SelectCardLocationScreen from './screens/SelectCardLocationScreen';
