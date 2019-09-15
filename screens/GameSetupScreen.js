@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { DECKS } from '../model/constants';
 import { cardButtonStyle, pageGradientColors, selectCardButtonBgColor, selectCardButtonFgColor, styles } from '../styles';
 
-export default class GameSetupScreen extends Component {
+export default class GameSetupScreen extends PureComponent {
     static navigationOptions = {
         header: null,
         title: 'Game Setup',

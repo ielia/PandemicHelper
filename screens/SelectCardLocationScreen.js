@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import React, { PureComponent } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import LocationCard from '../model/LocationCard';
-import { DECKS, LOCATIONS_BY_DISEASE } from '../model/constants';
+import { LOCATIONS_BY_DISEASE } from '../model/constants';
 import { cardButtonStyle, pageGradientColors, styles } from '../styles';
 
-export default class SelectCardLocationScreen extends Component {
+export default class SelectCardLocationScreen extends PureComponent {
     static navigationOptions = ({ navigation }) => ({
         title: `Select ${navigation.state.params.deck.name} Card City`,
     });

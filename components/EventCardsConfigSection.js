@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Switch, Text, View } from 'react-native';
 import { EVENTS } from '../model/constants';
 import { styles } from '../styles';
 
-export default class EventCardsSection extends Component {
+export default class EventCardsConfigSection extends PureComponent {
     static propTypes = {
         events: PropTypes.objectOf(PropTypes.bool).isRequired,
         onValueChange: PropTypes.func,
@@ -12,6 +12,7 @@ export default class EventCardsSection extends Component {
 
     render() {
         const { events, onValueChange } = this.props;
+        // console.log(`EventCardsConfigSection.render()`);
         return (
             <View key='event-cards-section'>
                 <Text key='event-cards-label' style={styles.heading}>Event Cards</Text>

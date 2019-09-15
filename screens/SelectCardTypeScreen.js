@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import EpidemicCard from '../model/EpidemicCard';
-import { CARD_TYPES, DECKS, DISEASES } from '../model/constants';
+import { CARD_TYPES, DISEASES } from '../model/constants';
 import LinearGradient from 'react-native-linear-gradient';
 import { cardButtonStyle, pageGradientColors, styles } from '../styles';
 
@@ -14,7 +14,7 @@ const buttonContainerStyle = (index) => ({
     width: '50%',
 });
 
-export default class SelectCardTypeScreen extends Component {
+export default class SelectCardTypeScreen extends PureComponent {
     static navigationOptions = ({ navigation }) => ({
         title: `Select ${navigation.state.params.deck.name} Card Type`,
     });

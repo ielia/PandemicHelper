@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-import {Button, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import React, { PureComponent } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {cardButtonStyle, pageGradientColors, styles} from '../styles';
-import LocationCard from "../model/LocationCard";
+import { cardButtonStyle, pageGradientColors, styles } from '../styles';
 
-export default class SelectCardEventScreen extends Component {
+export default class SelectCardEventScreen extends PureComponent {
     static navigationOptions = {
         title: 'Select Player Card Event',
     };

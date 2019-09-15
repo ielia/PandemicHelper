@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Button, TextInput, View } from 'react-native';
 
-export default class ClearableTextInput extends Component {
+export default class ClearableTextInput extends PureComponent {
     static propTypes = {
         keyPrefix: PropTypes.string,
         onChangeText: PropTypes.func,
@@ -18,21 +18,28 @@ export default class ClearableTextInput extends Component {
         value: '',
     };
 
+    constructor(props) {
+        super(props);
+        this.onChangeText = (text) => this.props.onChangeText(text);
+        this.onClearText = async () => { await this.props.onClearText(); await this.props.onChangeText(''); };
+    }
+
     render() {
-        const { keyPrefix, onChangeText, onClearText, placeholder, value } = this.props;
+        const { keyPrefix, placeholder, value } = this.props;
+        // console.log('ClearableTextInput.render()');
         return (
             <View key={`${keyPrefix}-container`} style={{ flex: 1, flexDirection: 'row', height: 40, width: '100%' }}>
                 <TextInput
                     key={`${keyPrefix}-input`}
                     style={{ alignSelf: 'stretch', borderColor: 'gray', borderWidth: 1, flex: 1, height: '100%', marginRight: 5 }}
-                    onChangeText={(text) => onChangeText(text)}
+                    onChangeText={this.onChangeText}
                     value={value}
                     placeholder={placeholder}
                 />
                 <Button
                     key={`${keyPrefix}-clear-button`}
                     style={{ height: '100%', width: 20 }}
-                    onPress={async () => { await onClearText(); await onChangeText(''); }}
+                    onPress={this.onClearText}
                     title='X'
                     color='#FF0000'
                 />

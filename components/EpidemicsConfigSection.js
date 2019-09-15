@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Text, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { styles } from '../styles';
 
-export default class EpidemicsConfigSection extends Component {
+export default class EpidemicsConfigSection extends PureComponent {
     static propTypes = {
         numberOfEpidemics: PropTypes.number.isRequired,
         onValueChange: PropTypes.func,
@@ -15,6 +15,7 @@ export default class EpidemicsConfigSection extends Component {
 
     render() {
         const { numberOfEpidemics, onValueChange } = this.props;
+        // console.log(`EpidemicsConfigSection.render()`);
         return (
             <View key='epidemics-section'>
                 <Text key='epidemics-label' style={styles.heading}>Epidemics</Text>

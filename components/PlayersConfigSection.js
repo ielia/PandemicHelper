@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Picker, Text, View } from 'react-native';
 import ClearableTextInput from '../components/ClearableTextInput';
 import { MAX_PLAYERS, PLAYER_ROLES } from '../model/constants';
 import { styles } from '../styles';
 
-export default class PlayersConfigSection extends Component {
+const PLAYER_INDEXES = [...Array(MAX_PLAYERS).keys()];
+const PLAYER_NUMBERS = PLAYER_INDEXES.map(i => i + 1);
+const PLAYER_ROLE_OBJECTS = Object.values(PLAYER_ROLES);
+
+export default class PlayersConfigSection extends PureComponent {
     static propTypes = {
         names: PropTypes.arrayOf(PropTypes.string),
         onChangeName: PropTypes.func,
@@ -27,33 +31,38 @@ export default class PlayersConfigSection extends Component {
         roles: Array(4).fill(''),
     };
 
+    constructor(props) {
+        super(props);
+        this.onChangeNameTextInputs = PLAYER_INDEXES.map(index => async function (name) {
+            await this.props.onChangeName(index, name);
+            const newNames = [...this.props.names];
+            newNames[index] = name;
+            await this.props.onChangeNames(newNames);
+            await this.props.onChangePlayer({ name, role: this.props.roles[index] });
+            await this.props.onChangePlayers({ names: newNames, roles: this.props.roles });
+        }.bind(this));
+        this.onChangeRolePickerValues = PLAYER_INDEXES.map(index => async function (role) {
+            await this.props.onChangeRole(index, role);
+            const newRoles = [...this.props.roles];
+            newRoles[index] = role;
+            await this.props.onChangeRoles(newRoles);
+            await this.props.onChangePlayer({ name: this.props.names[index], role });
+            await this.props.onChangePlayers({ names: this.props.names, roles: newRoles });
+        }.bind(this));
+    }
+
     render() {
-        const {
-            names,
-            onChangeName,
-            onChangeNames,
-            onChangePlayer,
-            onChangePlayers,
-            onChangeRole,
-            onChangeRoles,
-            roles
-        } = this.props;
+        const { names, roles } = this.props;
+        // console.log(`PlayersConfigSection.render()`);
         return (
             <View key='players-section'>
                 <Text key='players-label' style={styles.heading}>Players</Text>
                 <View key='player-names-and-roles' style={{ height: 360 }}>
-                    {[...Array(MAX_PLAYERS).keys()].map(i => i + 1).map((value, index) =>
+                    {PLAYER_NUMBERS.map((value, index) =>
                         <View key={`player${value}-data-container`} style={{ flex: 1, flexDirection: 'column', height: 80, marginBottom: 10, width: '100%' }}>
                             <ClearableTextInput
                                 keyPrefix={`player${value}-name`}
-                                onChangeText={async (name) => {
-                                    await onChangeName(index, name);
-                                    const newNames = [...names];
-                                    newNames[index] = name;
-                                    await onChangeNames(newNames);
-                                    await onChangePlayer({ name, role: roles[index] });
-                                    await onChangePlayers({ names: newNames, roles });
-                                }}
+                                onChangeText={this.onChangeNameTextInputs[index]}
                                 value={names[index]}
                                 placeholder={`player ${value}'s name`}
                             />
@@ -61,16 +70,9 @@ export default class PlayersConfigSection extends Component {
                                 key={`player${value}-role-picker`}
                                 selectedValue={roles[index]}
                                 style={{ alignSelf: 'flex-end', borderColor: 'gray', borderWidth: 1, flex: 1, height: 40, width: '80%' }}
-                                onValueChange={async (role) => {
-                                    await onChangeRole(index, role);
-                                    const newRoles = [...roles];
-                                    newRoles[index] = role;
-                                    await onChangeRoles(newRoles);
-                                    await onChangePlayer({ name: names[index], role });
-                                    await onChangePlayers({ names, roles: newRoles });
-                                }}
+                                onValueChange={this.onChangeRolePickerValues[index]}
                             >
-                                {Object.values(PLAYER_ROLES).map(({ id, name }) => <Picker.Item key={`player${value}-role-${id}`} label={name} value={id} />)}
+                                {PLAYER_ROLE_OBJECTS.map(({ id, name }) => <Picker.Item key={`player${value}-role-${id}`} label={name} value={id} />)}
                             </Picker>
                         </View>
                     )}
